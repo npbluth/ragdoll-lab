@@ -1,0 +1,100 @@
+:root{color-scheme:dark;--bg:#0b1014;--panel:#11181e;--line:#253139;--muted:#8ea0a9;--text:#eaf4f5;--accent:#a8f06a;--cyan:#69dfea;--surface:#151f25;--surface-hover:#1a292e;--border:#2b3a42}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Avenir Next",Arial,sans-serif;font-size:14px;display:flex;flex-direction:column;min-height:100dvh}
+button,input,select{font:inherit}
+button,a,input,select{-webkit-tap-highlight-color:transparent}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:3px}
+button:active{transform:translateY(1px)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+kbd{font:11px monospace;border:1px solid #3a4b54;border-radius:4px;padding:2px 5px;color:#b9c9cf}
+
+/* Top bar */
+.topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 28px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none;font-size:19px;font-weight:800;letter-spacing:-.6px}
+.brand-light{font-weight:400;color:#b8c6ca}
+.brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);color:#152020;display:grid;place-items:center;font-size:25px;position:relative}
+.brand-icon span{position:absolute;right:-4px;top:-6px;font-size:17px;color:var(--accent)}
+.topbar-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.arena-select{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;margin-right:8px}
+select{min-height:44px;background:#18232a;color:#d3e0e5;border:1px solid #2f414a;border-radius:8px;padding:0 10px;font-size:13px}
+.bar-button{min-height:44px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--surface);color:#cbd9de;border-radius:8px;padding:0 14px;font-size:13px;transition:.15s}
+.bar-button:hover{background:var(--surface-hover);border-color:#5b7b82}
+.bar-button[aria-pressed=true],.bar-button[aria-expanded=true]{border-color:var(--accent);color:var(--accent)}
+.icon-button{width:44px;justify-content:center;padding:0;font-size:18px}
+
+/* Arena */
+.game{flex-grow:1;min-height:0;display:flex;flex-direction:column;gap:16px;padding:20px 28px 24px}
+.viewport{position:relative;flex-grow:1;min-height:340px;border:1px solid #31464e;border-radius:12px;overflow:hidden;background:#0a151e}
+canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.hud{position:absolute;top:20px;left:20px;display:flex;flex-direction:column;gap:4px;padding:14px 18px;border-radius:10px;background:#0b1217d9;border:1px solid #2a3b43;pointer-events:none}
+.hud-label{font:11px monospace;letter-spacing:1.5px;text-transform:uppercase;color:#e1ba75}
+.hud strong{font:800 30px/1.1 "Avenir Next",Arial,sans-serif;letter-spacing:-1px;font-variant-numeric:tabular-nums;color:#ffca72}
+.hud-meta{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.arena-badge{position:absolute;bottom:12px;right:16px;font:10px monospace;letter-spacing:1px;color:#8fa9b2;pointer-events:none;display:flex;gap:8px;align-items:center}
+.arena-badge i{width:5px;height:5px;border-radius:50%;background:var(--cyan);display:inline-block}
+.arena-badge span{color:#6f8f99;border-left:1px solid #38505c;padding-left:8px}
+
+/* Popover panels over the arena */
+.popover{position:absolute;top:20px;right:20px;width:320px;max-height:calc(100% - 40px);overflow:auto;display:flex;flex-direction:column;gap:16px;padding:22px;border-radius:12px;background:#11181ef5;border:1px solid #31464e}
+.popover[hidden]{display:none}
+.popover-head{display:flex;align-items:center;justify-content:space-between}
+.popover h2{margin:0;font-size:16px;font-weight:600}
+.field{display:flex;flex-direction:column;gap:12px;color:#c3d1d6;font-size:13px}
+.field>span{display:flex;justify-content:space-between}
+.field strong{font:13px monospace;color:#e2eef1}
+.select-field select{width:100%}
+input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+.field-label{font:11px monospace;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:-6px}
+.add-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.add-grid button,.behavior-list button,.wide-button{min-height:44px;border:1px solid var(--border);background:var(--surface);color:#cbd9de;border-radius:8px;padding:0 12px;font-size:13px;text-align:left;transition:.15s}
+.add-grid button:hover,.behavior-list button:hover,.wide-button:hover{background:var(--surface-hover);border-color:#5b7b82}
+#addRagdollButton{background:var(--accent);color:#17251a;border-color:var(--accent);font-weight:700}
+.behavior-list{display:flex;flex-direction:column;gap:6px}
+.behavior-list button{display:flex;align-items:center;gap:10px}
+.behavior-list button[aria-pressed=true]{background:#a8f01215;border-color:#a8f075;color:var(--accent)}
+.inline-toggle{display:flex;align-items:center;gap:10px;min-height:44px;font-size:13px;color:#c3d1d6;cursor:pointer}
+input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px}
+
+/* Hotbar */
+.hotbar{flex-shrink:0;display:flex;flex-direction:column;gap:14px;padding:16px 18px;border-radius:12px;background:var(--panel);border:1px solid var(--line)}
+.hotbar-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hotbar-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.hotbar-tabs button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--border);background:transparent;color:#b9c9cf;font-size:13px}
+.hotbar-tabs button:hover{border-color:#5b7b82}
+.hotbar-tabs button[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:#17251a;font-weight:700}
+.hotbar-hint{margin:0;flex:1 1 260px;font-size:13px;color:var(--muted);line-height:1.4}
+.hotbar-hint strong{color:var(--text);font-weight:600;margin-right:6px}
+.weapon-status{font:11px monospace;color:var(--accent);margin-left:6px}
+#blackHoleReverseRow[style*="none"]{display:none!important}
+.hotbar-slots{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.hotbar-slots[hidden]{display:none}
+.hotbar-slots .tool-row,.hotbar-slots button{position:relative;flex:0 0 auto;width:112px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px 8px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:#c3d1d6;font-size:12px;text-align:center;cursor:pointer;transition:.15s}
+.hotbar-slots .tool-row:hover,.hotbar-slots button:hover{background:var(--surface-hover);border-color:#5b7b82}
+.hotbar-slots .tool-row:has(input:checked){background:#a8f01215;border-color:#a8f075;color:var(--accent)}
+.hotbar-slots input{position:absolute;opacity:0;pointer-events:none}
+.slot-key{position:absolute;top:6px;left:8px;font:10px monospace;color:#6f8f99}
+.tool-symbol{font-size:20px;line-height:1;color:#8fa9b2}
+.tool-row:has(input:checked) .tool-symbol{color:var(--accent)}
+
+.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%) translateY(20px);background:#d7fba5;color:#14241a;border-radius:7px;padding:12px 22px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:10}
+.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:900px){
+  .bar-button span{display:none}
+  .arena-select>span{display:none}
+}
+@media(max-width:700px){
+  .topbar{padding:12px 16px}
+  .brand-light{display:none}
+  .game{padding:12px 12px 16px;gap:12px}
+  .viewport{flex-grow:0;height:56dvh;min-height:300px}
+  .hud{top:12px;left:12px;padding:10px 12px}
+  .hud strong{font-size:22px}
+  .popover{position:fixed;top:auto;left:12px;right:12px;bottom:12px;width:auto;max-height:75dvh;z-index:5}
+  .hotbar{padding:14px}
+  .hotbar-tabs{flex-wrap:nowrap;overflow-x:auto}
+  .hotbar-tabs button{flex-shrink:0}
+  .hotbar-slots .tool-row,.hotbar-slots button{width:92px;min-height:76px}
+}

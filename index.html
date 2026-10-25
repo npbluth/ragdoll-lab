@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ragdoll Lab / Chamber 01</title>
+    <link rel="stylesheet" href="styles.css?v=10" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./"><span class="brand-icon">R<span>✳</span></span><span>RAGDOLL<span class="brand-light"> / LAB</span></span></a>
+      <h1 id="chamberTitle" class="sr-only">Orbital chamber <span>01</span></h1>
+      <div class="topbar-controls">
+        <label class="arena-select">
+          <span>Arena</span>
+          <select id="arenaTheme"><option value="cyan">Orbital chamber</option><option value="violet">Neon reactor</option><option value="amber">Solar foundry</option></select>
+        </label>
+        <button id="pauseButton" class="bar-button" type="button" aria-label="Pause simulation" aria-pressed="false" title="Pause simulation (Space)">Ⅱ <span>Pause</span></button>
+        <button id="slowButton" class="bar-button" type="button" aria-label="Toggle slow motion" aria-pressed="false" title="Toggle slow motion">¼× <span>Slow motion</span></button>
+        <button id="resetButton" class="bar-button" type="button" title="Reset arena and robots (R)">↺ <span>Reset</span></button>
+        <button id="robotsButton" class="bar-button" type="button" aria-expanded="false" aria-controls="robotsPanel">Robots <kbd>K</kbd></button>
+        <button id="settingsButton" class="bar-button icon-button" type="button" aria-expanded="false" aria-controls="settingsPanel" aria-label="Settings">⚙</button>
+      </div>
+    </header>
+
+    <main class="game">
+      <div class="viewport">
+        <canvas id="stage" aria-label="Interactive physics arena. Drag robots to throw them; pick a tool below to use it."></canvas>
+
+        <section class="hud" aria-label="Score">
+          <span class="hud-label">Repair bill</span>
+          <strong id="damageStat" aria-label="Total damage in dollars">$0</strong>
+          <span class="hud-meta"><span id="standingStat">2 / 2</span> standing · <span id="fractureStat">0</span> fractures · <span id="integrityStat">100%</span> intact</span>
+        </section>
+
+        <div class="arena-badge"><i></i> PHYSICS ACTIVE <span id="fpsValue">60 FPS</span></div>
+
+        <section id="robotsPanel" class="popover" aria-label="Robots" hidden>
+          <div class="popover-head"><h2>Robots</h2><kbd>K</kbd></div>
+          <label class="field" for="ragdollCount">
+            <span>Count <strong id="ragdollCountValue">2</strong></span>
+            <input id="ragdollCount" type="range" min="1" max="20" step="1" value="2" />
+          </label>
+          <div class="field-label">Add</div>
+          <div class="add-grid actions">
+            <button id="addRagdollButton" type="button">Add robot</button>
+            <button id="masterButton" type="button">Master</button>
+            <button id="superRagdollButton" type="button">Super</button>
+            <button id="sixSevenButton" type="button">Six-seven</button>
+          </div>
+          <div class="field-label">Behavior</div>
+          <div class="behavior-list">
+            <button type="button" data-behavior="still" aria-pressed="true"><kbd>1</kbd> Stand still</button>
+            <button type="button" data-behavior="defensive" aria-pressed="false"><kbd>2</kbd> Defensive</button>
+            <button type="button" data-behavior="walk" aria-pressed="false"><kbd>3</kbd> Walk</button>
+            <button type="button" data-behavior="stumble" aria-pressed="false"><kbd>4</kbd> Stumble</button>
+            <button type="button" data-behavior="panic" aria-pressed="false"><kbd>5</kbd> Panicked chaos</button>
+          </div>
+          <label class="inline-toggle"><input id="fightModeToggle" type="checkbox" checked /> Fight mode · touching robots brawl</label>
+        </section>
+
+        <section id="settingsPanel" class="popover" aria-label="Settings" hidden>
+          <div class="popover-head"><h2>Settings</h2></div>
+          <label class="field" for="gravitySlider">
+            <span>Gravity <strong id="gravityValue">1.00x</strong></span>
+            <input id="gravitySlider" type="range" min="0.05" max="2.5" step="0.05" value="1" />
+          </label>
+          <label class="field select-field">
+            <span>Graphics</span>
+            <select id="qualitySelect"><option value="high">Ultra · lighting + effects</option><option value="low">Performance</option></select>
+          </label>
+          <button id="fullscreenButton" class="wide-button" type="button">⛶ Fullscreen</button>
+        </section>
+      </div>
+
+      <section class="hotbar" aria-label="Tools">
+        <div class="hotbar-head">
+          <div class="hotbar-tabs" role="tablist" aria-label="Tool groups">
+            <button type="button" role="tab" data-tab="hands" aria-selected="true">Hands</button>
+            <button type="button" role="tab" data-tab="weapons" aria-selected="false">Weapons</button>
+            <button type="button" role="tab" data-tab="hazards" aria-selected="false">Hazards</button>
+            <button type="button" role="tab" data-tab="disasters" aria-selected="false">Disasters</button>
+          </div>
+          <p class="hotbar-hint"><strong id="activeEquipment">Grab &amp; throw</strong> <span id="toolHint">Drag a robot and fling it.</span> <span id="weaponStatus" class="weapon-status"></span></p>
+          <label id="blackHoleReverseRow" class="inline-toggle" style="display: none;"><input id="blackHoleReverseToggle" type="checkbox" /> Reverse black hole</label>
+        </div>
+
+        <div class="hotbar-slots tools-grid actions" data-panel="hands" role="tabpanel">
+          <label class="tool-row" data-hint="Drag a robot and fling it."><input type="radio" name="tool" value="hand" checked /><span>Grab &amp; throw</span></label>
+          <label class="tool-row" data-hint="Click a robot to repair it."><input type="radio" name="tool" value="health-boost" /><span>Health boost</span></label>
+          <label class="tool-row" data-hint="Click to set off a small blast."><input type="radio" name="tool" value="explosive-touch" /><span>Explosive touch</span></label>
+          <label class="tool-row" data-hint="Click two things to tie them together."><input type="radio" name="tool" value="bungee-rope" /><span>Bungee rope</span></label>
+        </div>
+        <div class="hotbar-slots tools-grid actions" data-panel="weapons" role="tabpanel" hidden>
+          <label class="tool-row" data-hint="Aim and click to fire a spread of pellets."><input type="radio" name="tool" value="ranger-shotgun" /><span>Shotgun</span></label>
+          <label class="tool-row" data-hint="Aim and click to fire an explosive rocket."><input type="radio" name="tool" value="rocket-launcher" /><span>Rocket</span></label>
+          <label class="tool-row" data-hint="Click to lob grenades with a one-second fuse."><input type="radio" name="tool" value="grenade-launcher" /><span>Grenade</span></label>
+          <label class="tool-row" data-hint="Swing through robots to send them flying."><input type="radio" name="tool" value="psychic-bat" /><span>Psychic bat</span></label>
+        </div>
+        <div class="hotbar-slots tools-grid actions" data-panel="hazards" role="tabpanel" hidden>
+          <label class="tool-row" data-hint="Click to drop an anvil from above."><input type="radio" name="tool" value="anvil-dropper" /><span>Anvil</span></label>
+          <label class="tool-row" data-hint="Hold to pull everything toward the cursor."><input type="radio" name="tool" value="water-lance" /><span>Black hole</span></label>
+          <label class="tool-row" data-hint="Click a robot to reverse its gravity."><input type="radio" name="tool" value="gravity-reverser" /><span>Gravity flip</span></label>
+          <button id="bombButton" type="button" data-hint="Places a bomb that explodes after ten seconds."><span class="tool-symbol" aria-hidden="true">◍</span>Bomb (10s)</button>
+          <button id="titaniumBallButton" type="button" data-hint="Drops a heavy titanium ball into the arena."><span class="tool-symbol" aria-hidden="true">●</span>Titanium ball</button>
+        </div>
+        <div class="hotbar-slots tools-grid actions" data-panel="disasters" role="tabpanel" hidden>
+          <button id="carButton" type="button" data-hint="A car speeds across the floor."><span class="tool-symbol" aria-hidden="true">▭</span>Car</button>
+          <button id="dropCarButton" type="button" data-hint="A car falls from the sky."><span class="tool-symbol" aria-hidden="true">⤓</span>Drop car</button>
+          <button id="sawButton" type="button" data-hint="A giant saw rolls through the arena."><span class="tool-symbol" aria-hidden="true">✺</span>Wheel of Death</button>
+          <button id="tsunamiButton" type="button" data-hint="Sends a wave across the arena."><span class="tool-symbol" aria-hidden="true">≋</span>Tsunami</button>
+          <button id="fireButton" type="button" data-hint="Starts a six-second fire where your cursor last was."><span class="tool-symbol" aria-hidden="true">▲</span>Fire</button>
+          <button id="lavaButton" type="button" data-hint="Lava rises from the floor."><span class="tool-symbol" aria-hidden="true">▬</span>Lava</button>
+          <label class="tool-row" data-hint="Click to detonate. Breaks everything."><input type="radio" name="tool" value="nuclear-bomb" /><span>Nuke</span></label>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js?v=18"></script>
+    <script src="renderer.js?v=13"></script>
+    <script src="particles.js?v=3"></script>
+  </body>
+</html>
